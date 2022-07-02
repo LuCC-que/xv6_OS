@@ -6,12 +6,14 @@
 char *
 fmtname(char *path)
 {
+  printf("the path is %s\n", path);
   static char buf[DIRSIZ + 1];
   char *p;
 
   // Find first character after last slash.
   for (p = path + strlen(path); p >= path && *p != '/'; p--)
     ;
+
   p++;
 
   // Return blank-padded name.
@@ -20,6 +22,9 @@ fmtname(char *path)
   memmove(buf, p, strlen(p));
   memset(buf + strlen(p), ' ', DIRSIZ - strlen(p));
   return buf;
+
+  // printf("the final p is %s\n", p);
+  // return p;
 }
 
 void ls(char *path)
@@ -54,20 +59,25 @@ void ls(char *path)
       printf("ls: path too long\n");
       break;
     }
+
+    // p points to somewhere in the buf
     strcpy(buf, path);
     p = buf + strlen(buf);
     *p++ = '/';
+
     while (read(fd, &de, sizeof(de)) == sizeof(de))
     {
       if (de.inum == 0)
         continue;
       memmove(p, de.name, DIRSIZ);
       p[DIRSIZ] = 0;
+      printf("what is p %s\n", p);
       if (stat(buf, &st) < 0)
       {
         printf("ls: cannot stat %s\n", buf);
         continue;
       }
+
       printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
     }
     break;
