@@ -1,6 +1,9 @@
 struct stat;
 struct rtcdate;
 
+// $$register the
+struct sysinfo;
+
 // system calls
 int fork(void);
 int exit(int) __attribute__((noreturn));
@@ -23,7 +26,12 @@ int getpid(void);
 char *sbrk(int);
 int sleep(int);
 int uptime(void);
+
+// $$register the trace function
 int trace(int);
+
+// $$register the sysinfo function
+int sysinfo(struct sysinfo *);
 
 // ulib.c
 int stat(const char *, struct stat *);

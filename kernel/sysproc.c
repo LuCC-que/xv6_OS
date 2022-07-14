@@ -6,6 +6,8 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "syscall.h"
+#include "sysinfo.h"
 
 uint64
 sys_exit(void)
@@ -90,8 +92,12 @@ sys_trace(void)
 {
 
   int n;
+
+  // argint tells what syscallnum is using
   if (argint(0, &n) < 0)
     return -1;
+
+  // assign n to syscallnum
   myproc()->syscallnum = n;
   return 0;
 }
@@ -107,4 +113,19 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+uint64
+sys_sysinfo(void)
+{
+  uint64 addr;
+  if (argaddr(0, &addr) < 0)
+    return -1;
+  struct sysinfo info;
+  info.freemem = freemem();
+  info.nproc = nproc();
+
+  if (copyout(myproc()->pagetable, addr, (char *)&info, sizeof(info)) < 0)
+    return -1;
+  return 0;
 }
