@@ -1,0 +1,10 @@
+{
+  "makefile.extensionOutputFolder": "./.vscode",
+  "files.associations": {
+    "*.ejs": "html",
+    "stdio.h": "c",
+    "user.h": "c",
+    "param.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
+}
